@@ -41,7 +41,8 @@ class OnlineGameScreen extends StatelessWidget {
           
           // Captured pieces (Opponent)
           CapturedPiecesWidget(
-            capturedPieces: state.getCapturedPieces()[engine.playerColor == PieceColor.white ? PieceColor.white : PieceColor.black] ?? [],
+            color: engine.playerColor == PieceColor.white ? PieceColor.white : PieceColor.black,
+            pieces: state.getCapturedPieces()[engine.playerColor == PieceColor.white ? PieceColor.white : PieceColor.black] ?? [],
           ),
           
           const Spacer(),
@@ -57,7 +58,8 @@ class OnlineGameScreen extends StatelessWidget {
           
           // Captured pieces (Player)
           CapturedPiecesWidget(
-            capturedPieces: state.getCapturedPieces()[engine.playerColor == PieceColor.white ? PieceColor.black : PieceColor.white] ?? [],
+            color: engine.playerColor == PieceColor.white ? PieceColor.black : PieceColor.white,
+            pieces: state.getCapturedPieces()[engine.playerColor == PieceColor.white ? PieceColor.black : PieceColor.white] ?? [],
           ),
           
           const SizedBox(height: 16),
