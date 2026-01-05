@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../engine/four_player_engine.dart';
 import '../engine/online_four_player_engine.dart';
 import '../models/four_player_models.dart';
 import '../widgets/four_player_board.dart';
-import '../screens/four_player_screen.dart'; // For UI components
+import '../screens/four_player_screen.dart';
 
 class OnlineFourPlayerGameScreen extends StatelessWidget {
   const OnlineFourPlayerGameScreen({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class OnlineFourPlayerGameScreen extends StatelessWidget {
 
           // Board
           Center(
-            child: Provider<FourPlayerChessEngine>.value(
+            child: ChangeNotifierProvider<FourPlayerChessEngine>.value(
               value: engine,
               child: const FourPlayerChessBoardWidget(),
             ),
@@ -58,9 +59,22 @@ class OnlineFourPlayerGameScreen extends StatelessWidget {
     );
   }
 
+  String _getColorName(FourPlayerColor color) {
+    return color.toString().split('.').last.toUpperCase();
+  }
+
+  Color _getColorValue(FourPlayerColor color) {
+    switch (color) {
+      case FourPlayerColor.white: return Colors.white;
+      case FourPlayerColor.black: return Colors.black;
+      case FourPlayerColor.red: return Colors.red;
+      case FourPlayerColor.blue: return Colors.blue;
+    }
+  }
+
   Widget _buildOnlineTurnIndicator(OnlineFourPlayerEngine engine) {
     final isMyTurn = engine.state.currentTurn == engine.playerColor;
-    final color = engine.state.currentTurn.getDisplayColor();
+    final color = _getColorValue(engine.state.currentTurn);
     
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -89,7 +103,7 @@ class OnlineFourPlayerGameScreen extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Text(
-            isMyTurn ? "YOUR TURN" : "${engine.state.currentTurn.name.toUpperCase()}'S TURN",
+            isMyTurn ? "YOUR TURN" : "${_getColorName(engine.state.currentTurn)}'S TURN",
             style: TextStyle(
               color: color,
               fontWeight: FontWeight.bold,
@@ -123,27 +137,17 @@ class OnlineFourPlayerGameScreen extends StatelessWidget {
             style: const TextStyle(fontSize: 12, color: Colors.white60),
           ),
           const Spacer(),
-          Text(
-            'Playing as: ${engine.playerColor?.name.toUpperCase()}',
-            style: TextStyle(
-              fontSize: 12, 
-              fontWeight: FontWeight.bold,
-              color: engine.playerColor?.getDisplayColor(),
+          if (engine.playerColor != null)
+            Text(
+              'Playing as: ${_getColorName(engine.playerColor!)}',
+              style: TextStyle(
+                fontSize: 12, 
+                fontWeight: FontWeight.bold,
+                color: _getColorValue(engine.playerColor!),
+              ),
             ),
-          ),
         ],
       ),
     );
-  }
-}
-
-extension on FourPlayerColor {
-  Color getDisplayColor() {
-    switch (this) {
-      case FourPlayerColor.white: return Colors.white;
-      case FourPlayerColor.black: return Colors.black;
-      case FourPlayerColor.red: return Colors.red;
-      case FourPlayerColor.blue: return Colors.blue;
-    }
   }
 }
