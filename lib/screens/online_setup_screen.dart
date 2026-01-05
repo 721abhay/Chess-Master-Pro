@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../engine/online_engine.dart';
+import '../engine/online_four_player_engine.dart';
 import '../models/chess_models.dart';
+import '../models/four_player_models.dart';
 import '../utils/constants.dart';
 import 'online_game_screen.dart';
+import 'online_four_player_screen.dart';
 
 class OnlineSetupScreen extends StatefulWidget {
   const OnlineSetupScreen({Key? key}) : super(key: key);
@@ -14,8 +17,14 @@ class OnlineSetupScreen extends StatefulWidget {
 
 class _OnlineSetupScreenState extends State<OnlineSetupScreen> {
   final TextEditingController _roomController = TextEditingController();
-  PieceColor _selectedColor = PieceColor.white;
   bool _isCreating = true;
+  bool _isFourPlayer = false;
+  
+  // 2-Player selection
+  PieceColor _selectedColor2P = PieceColor.white;
+  
+  // 4-Player selection
+  FourPlayerColor _selectedColor4P = FourPlayerColor.white;
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +40,15 @@ class _OnlineSetupScreenState extends State<OnlineSetupScreen> {
               'Online Multiplayer',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Create a room and share the ID with your friend',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white70),
-            ),
+            
             const SizedBox(height: 32),
             
-            // Tab-like selector
+            // Mode Selector
+            _buildModeSelector(),
+            
+            const SizedBox(height: 24),
+
+            // Tab-like selector (Create/Join)
             Container(
               decoration: BoxDecoration(
                 color: Colors.white10,
@@ -56,13 +65,13 @@ class _OnlineSetupScreenState extends State<OnlineSetupScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
 
             TextField(
               controller: _roomController,
               decoration: InputDecoration(
                 labelText: 'Room ID',
-                hintText: _isCreating ? 'Enter any ID (e.g. 1234)' : 'Enter shared ID',
+                hintText: 'Enter shared ID',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 prefixIcon: const Icon(Icons.meeting_room),
               ),
@@ -72,17 +81,13 @@ class _OnlineSetupScreenState extends State<OnlineSetupScreen> {
             if (_isCreating) ...[
               const Text('Play as:', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildColorOption(PieceColor.white, 'White'),
-                  const SizedBox(width: 24),
-                  _buildColorOption(PieceColor.black, 'Black'),
-                ],
-              ),
+              if (_isFourPlayer)
+                _build4PColorSelector()
+              else
+                _build2PColorSelector(),
             ],
             
-            const SizedBox(height: 48),
+            const SizedBox(height: 40),
 
             SizedBox(
               width: double.infinity,
@@ -90,7 +95,7 @@ class _OnlineSetupScreenState extends State<OnlineSetupScreen> {
               child: ElevatedButton(
                 onPressed: _startOnlineGame,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: _isFourPlayer ? Colors.purple : Colors.blue,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 child: Text(
@@ -105,13 +110,33 @@ class _OnlineSetupScreenState extends State<OnlineSetupScreen> {
     );
   }
 
+  Widget _buildModeSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildModeChip('2-Player', !_isFourPlayer, () => setState(() => _isFourPlayer = false)),
+        const SizedBox(width: 16),
+        _buildModeChip('4-Player', _isFourPlayer, () => setState(() => _isFourPlayer = true)),
+      ],
+    );
+  }
+
+  Widget _buildModeChip(String label, bool active, VoidCallback onTap) {
+    return ChoiceChip(
+      selected: active,
+      label: Text(label),
+      onSelected: (_) => onTap(),
+      selectedColor: active ? (label.startsWith('2') ? Colors.blue : Colors.purple) : null,
+    );
+  }
+
   Widget _buildTab(String title, bool active, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: active ? Colors.blue : Colors.transparent,
+          color: active ? Colors.blue.withOpacity(0.5) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
@@ -126,28 +151,50 @@ class _OnlineSetupScreenState extends State<OnlineSetupScreen> {
     );
   }
 
-  Widget _buildColorOption(PieceColor color, String label) {
-    final active = _selectedColor == color;
+  Widget _build2PColorSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildColorCircle(PieceColor.white, Colors.white, _selectedColor2P == PieceColor.white, 
+            () => setState(() => _selectedColor2P = PieceColor.white)),
+        const SizedBox(width: 32),
+        _buildColorCircle(PieceColor.black, Colors.black, _selectedColor2P == PieceColor.black, 
+            () => setState(() => _selectedColor2P = PieceColor.black)),
+      ],
+    );
+  }
+
+  Widget _build4PColorSelector() {
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      alignment: WrapAlignment.center,
+      children: [
+        _buildColorCircle(FourPlayerColor.white, Colors.white, _selectedColor4P == FourPlayerColor.white, 
+            () => setState(() => _selectedColor4P = FourPlayerColor.white)),
+        _buildColorCircle(FourPlayerColor.black, Colors.black, _selectedColor4P == FourPlayerColor.black, 
+            () => setState(() => _selectedColor4P = FourPlayerColor.black)),
+        _buildColorCircle(FourPlayerColor.red, Colors.red, _selectedColor4P == FourPlayerColor.red, 
+            () => setState(() => _selectedColor4P = FourPlayerColor.red)),
+        _buildColorCircle(FourPlayerColor.blue, Colors.blue, _selectedColor4P == FourPlayerColor.blue, 
+            () => setState(() => _selectedColor4P = FourPlayerColor.blue)),
+      ],
+    );
+  }
+
+  Widget _buildColorCircle(dynamic value, Color color, bool active, VoidCallback onTap) {
     return GestureDetector(
-      onTap: () => setState(() => _selectedColor = color),
+      onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        width: 60,
+        height: 60,
         decoration: BoxDecoration(
-          color: active ? Colors.blue.withOpacity(0.2) : Colors.white10,
-          border: Border.all(color: active ? Colors.blue : Colors.transparent, width: 2),
-          borderRadius: BorderRadius.circular(12),
+          color: color,
+          shape: BoxShape.circle,
+          border: Border.all(color: active ? Colors.blue : Colors.white24, width: 4),
+          boxShadow: active ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 10)] : null,
         ),
-        child: Column(
-          children: [
-            Icon(
-              Icons.person,
-              color: color == PieceColor.white ? Colors.white : Colors.grey[800],
-              size: 40,
-            ),
-            const SizedBox(height: 8),
-            Text(label),
-          ],
-        ),
+        child: active ? const Icon(Icons.check, color: Colors.blue, weight: 10) : null,
       ),
     );
   }
@@ -155,29 +202,28 @@ class _OnlineSetupScreenState extends State<OnlineSetupScreen> {
   void _startOnlineGame() {
     final roomId = _roomController.text.trim();
     if (roomId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a Room ID')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter a Room ID')));
       return;
     }
 
-    // Initialize Online Engine
-    final engine = OnlineChessEngine(serverUrl: ApiConfig.baseUrl);
-    
-    // Join room
-    // If joining, we don't know the color yet, but typically 2nd person is opposite of first.
-    // For now, let's assume the user picks their color for simplicity, or we auto-assign.
-    // Let's just use the selected color.
-    engine.joinRoom(roomId, _selectedColor);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
+    if (_isFourPlayer) {
+      final engine = OnlineFourPlayerEngine(serverUrl: ApiConfig.baseUrl);
+      engine.joinRoom(roomId, _selectedColor4P);
+      Navigator.push(context, MaterialPageRoute(
+        builder: (_) => ChangeNotifierProvider<OnlineFourPlayerEngine>.value(
+          value: engine,
+          child: const OnlineFourPlayerGameScreen(),
+        ),
+      ));
+    } else {
+      final engine = OnlineChessEngine(serverUrl: ApiConfig.baseUrl);
+      engine.joinRoom(roomId, _selectedColor2P);
+      Navigator.push(context, MaterialPageRoute(
         builder: (_) => ChangeNotifierProvider<OnlineChessEngine>.value(
           value: engine,
           child: const OnlineGameScreen(),
         ),
-      ),
-    );
+      ));
+    }
   }
 }
