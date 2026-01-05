@@ -4,7 +4,6 @@ import '../engine/four_player_engine.dart';
 import '../engine/online_four_player_engine.dart';
 import '../models/four_player_models.dart';
 import '../widgets/four_player_board.dart';
-import '../screens/four_player_screen.dart';
 
 class OnlineFourPlayerGameScreen extends StatelessWidget {
   const OnlineFourPlayerGameScreen({Key? key}) : super(key: key);

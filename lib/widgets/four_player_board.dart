@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../engine/four_player_engine.dart';
 import '../models/chess_models.dart';
 import '../models/four_player_models.dart';
-import '../utils/constants.dart';
 
 class FourPlayerChessBoardWidget extends StatefulWidget {
   const FourPlayerChessBoardWidget({Key? key}) : super(key: key);

@@ -85,7 +85,7 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
       child: Container(
         width: 300,
         height: 300,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red.withOpacity(0.05)),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red.withOpacity( 0.05)),
         child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100), child: const SizedBox()),
       ),
     );
@@ -94,7 +94,7 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
   Widget _buildHeader(BuildContext context, FourPlayerChessEngine engine) {
     return Container(
       padding: const EdgeInsets.all(20),
-      color: Colors.white.withOpacity(0.02),
+      color: Colors.white.withOpacity( 0.02),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -140,7 +140,7 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
   Widget _buildModeSelector() {
     return Container(
       padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(15)),
+      decoration: BoxDecoration(color: Colors.white.withOpacity( 0.05), borderRadius: BorderRadius.circular(15)),
       child: Row(
         children: [
           _buildModeTab('FFA', _mode == FourPlayerMode.freeForAll, () => setState(() { _mode = FourPlayerMode.freeForAll; _engine.reset(mode: _mode); })),
@@ -157,9 +157,9 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: active ? Colors.purpleAccent.withOpacity(0.2) : Colors.transparent,
+            color: active ? Colors.purpleAccent.withOpacity( 0.2) : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: active ? Colors.purpleAccent.withOpacity(0.5) : Colors.transparent),
+            border: Border.all(color: active ? Colors.purpleAccent.withOpacity( 0.5) : Colors.transparent),
           ),
           child: Text(label, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: active ? Colors.white : Colors.white38)),
         ),
@@ -174,10 +174,10 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withOpacity( 0.1),
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: color.withOpacity(0.4), width: 2),
-        boxShadow: [BoxShadow(color: color.withOpacity(0.15), blurRadius: 15, spreadRadius: 2)],
+        border: Border.all(color: color.withOpacity( 0.4), width: 2),
+        boxShadow: [BoxShadow(color: color.withOpacity( 0.15), blurRadius: 15, spreadRadius: 2)],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -197,7 +197,7 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
   Widget _buildGameOverPill(FourPlayerGameState state) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: BoxDecoration(color: Colors.green.withOpacity(0.2), borderRadius: BorderRadius.circular(30), border: Border.all(color: Colors.green, width: 2)),
+      decoration: BoxDecoration(color: Colors.green.withOpacity( 0.2), borderRadius: BorderRadius.circular(30), border: Border.all(color: Colors.green, width: 2)),
       child: Text(_getWinnerText(state).toUpperCase(), style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w900, letterSpacing: 2)),
     );
   }
@@ -214,10 +214,10 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+        color: Colors.white.withOpacity( 0.04),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white10),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.35), blurRadius: 40, spreadRadius: 2)],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity( 0.35), blurRadius: 40, spreadRadius: 2)],
       ),
       child: const FourPlayerChessBoardWidget(),
     );
@@ -237,7 +237,7 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
           width: 100,
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: dead ? Colors.transparent : (active ? pColor.withOpacity(0.15) : Colors.white.withOpacity(0.03)),
+            color: dead ? Colors.transparent : (active ? pColor.withOpacity( 0.15) : Colors.white.withOpacity( 0.03)),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: dead ? Colors.white10 : (active ? pColor : Colors.white24), width: active ? 2 : 1),
           ),

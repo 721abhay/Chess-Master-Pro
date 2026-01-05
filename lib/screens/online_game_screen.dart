@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../engine/online_engine.dart';
 import '../models/chess_models.dart';
 import '../widgets/chess_board.dart';
-import '../widgets/move_history.dart';
 import '../widgets/captured_pieces.dart';
 
 class OnlineGameScreen extends StatelessWidget {

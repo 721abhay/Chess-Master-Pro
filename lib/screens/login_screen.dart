@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
         labelText: label,
         prefixIcon: Icon(icon, color: Colors.white38),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.05),
+        fillColor: Colors.white.withOpacity( 0.05),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,

@@ -100,7 +100,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
             child: Icon(
               Icons.grid_4x4,
               size: 200,
-              color: Colors.white.withOpacity(0.02),
+              color: Colors.white.withOpacity( 0.02),
             ),
           ),
         ],
@@ -147,7 +147,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
         child: ElevatedButton(
           onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen())),
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF6366F1).withOpacity(0.1),
+            backgroundColor: const Color(0xFF6366F1).withOpacity( 0.1),
             foregroundColor: const Color(0xFF6366F1),
             side: const BorderSide(color: Color(0xFF6366F1), width: 1),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -186,7 +186,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.3),
+            color: const Color(0xFF6366F1).withOpacity( 0.3),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
@@ -214,8 +214,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   colors: [
-                    const Color(0xFF0F172A).withOpacity(0.95),
-                    const Color(0xFF1E293B).withOpacity(0.4),
+                    const Color(0xFF0F172A).withOpacity( 0.95),
+                    const Color(0xFF1E293B).withOpacity( 0.4),
                     Colors.transparent,
                   ],
                 ),
@@ -297,9 +297,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.04),
+          color: Colors.white.withOpacity( 0.04),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.08)),
+          border: Border.all(color: Colors.white.withOpacity( 0.08)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,7 +307,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withOpacity( 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: color, size: 24),
@@ -360,9 +360,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
       child: Container(
         height: 100,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.04),
+          color: Colors.white.withOpacity( 0.04),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.08)),
+          border: Border.all(color: Colors.white.withOpacity( 0.08)),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(24),
@@ -372,7 +372,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
               Positioned(
                 right: -20,
                 bottom: -20,
-                child: Icon(icon, size: 100, color: accent.withOpacity(0.05)),
+                child: Icon(icon, size: 100, color: accent.withOpacity( 0.05)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -382,9 +382,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
                       height: 54,
                       width: 54,
                       decoration: BoxDecoration(
-                        color: accent.withOpacity(0.1),
+                        color: accent.withOpacity( 0.1),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: accent.withOpacity(0.2)),
+                        border: Border.all(color: accent.withOpacity( 0.2)),
                       ),
                       child: Icon(icon, color: accent, size: 28),
                     ),
@@ -449,7 +449,7 @@ class NebulaPainter extends CustomPainter {
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 100);
 
     // Deep blue nebula
-    paint.color = const Color(0xFF6366F1).withOpacity(0.08);
+    paint.color = const Color(0xFF6366F1).withOpacity( 0.08);
     canvas.drawCircle(
       Offset(
         size.width * (0.5 + 0.3 * math.sin(animationValue * 2 * math.pi)),
@@ -460,7 +460,7 @@ class NebulaPainter extends CustomPainter {
     );
 
     // Purple nebula
-    paint.color = const Color(0xFFEC4899).withOpacity(0.05);
+    paint.color = const Color(0xFFEC4899).withOpacity( 0.05);
     canvas.drawCircle(
       Offset(
         size.width * (0.2 + 0.4 * math.cos(animationValue * 2 * math.pi)),
