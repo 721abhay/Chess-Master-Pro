@@ -1,8 +1,7 @@
-// Main Application Entry Point
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'engine/chess_engine.dart';
+import 'engine/auth_engine.dart';
 import 'screens/main_menu.dart';
 
 void main() {
@@ -14,8 +13,11 @@ class ChessApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ChessEngine(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ChessEngine()),
+        ChangeNotifierProvider(create: (_) => AuthEngine()),
+      ],
       child: MaterialApp(
         title: 'Chess Master',
         debugShowCheckedModeBanner: false,
