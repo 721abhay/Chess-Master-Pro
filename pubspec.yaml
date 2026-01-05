@@ -20,6 +20,9 @@ dependencies:
   # SVG rendering for premium pieces
   flutter_svg: ^2.0.0
   
+  # Real-time Multiplayer
+  socket_io_client: ^2.0.3
+  
 # Audio for sound effects
   audioplayers: ^5.2.0
   

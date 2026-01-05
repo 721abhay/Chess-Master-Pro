@@ -29,9 +29,8 @@ class BoardColors {
 /// API configuration
 class ApiConfig {
   // Android emulator uses 10.0.2.2 to access host machine's localhost
-  static const String baseUrl = 'http://10.0.2.2:3001';
   // For physical device on same network, use your computer's IP:
-  // static const String baseUrl = 'http://192.168.1.XXX:3001';
+  static const String baseUrl = 'http://192.168.0.108:3001';
   // For production:
   // static const String baseUrl = 'https://your-backend.com';
 }

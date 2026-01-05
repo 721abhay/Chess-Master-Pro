@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'game_screen.dart';
 import 'four_player_screen.dart';
+import 'online_setup_screen.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({Key? key}) : super(key: key);
@@ -47,7 +48,7 @@ class MainMenuScreen extends StatelessWidget {
               // 2-Player Chess
               _buildModeButton(
                 context,
-                title: '2-Player Chess',
+                title: 'Local Chess',
                 subtitle: 'Classic chess with AI or local opponent',
                 icon: Icons.people,
                 color: Colors.blue,
@@ -55,6 +56,22 @@ class MainMenuScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const GameScreen()),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Online Multiplayer
+              _buildModeButton(
+                context,
+                title: 'Online Multiplayer',
+                subtitle: 'Play with friends on other devices via Room ID',
+                icon: Icons.public,
+                color: Colors.green,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const OnlineSetupScreen()),
                   );
                 },
               ),
