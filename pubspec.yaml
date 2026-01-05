@@ -32,6 +32,7 @@ dependencies:
   
   # Icons
   cupertino_icons: ^1.0.8
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +46,7 @@ flutter:
   assets:
     - assets/sounds/
     - assets/pieces/
+    - assets/images/
   
   # Future: Custom fonts if needed
   # fonts:

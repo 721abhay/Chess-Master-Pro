@@ -1,5 +1,4 @@
-// 4-Player Chess Game Screen
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../engine/four_player_engine.dart';
@@ -34,283 +33,227 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
     return ChangeNotifierProvider.value(
       value: _engine,
       child: Scaffold(
-        backgroundColor: const Color(0xFF1E1E1E),
-        appBar: AppBar(
-          title: const Text('4-Player Chess'),
-          backgroundColor: const Color(0xFF2C2C2C),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Reset Game?'),
-                    content: const Text('Are you sure you want to start a new game?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          setState(() {
-                            _engine.reset(mode: _mode);
-                          });
-                        },
-                        child: const Text('Reset'),
+        backgroundColor: const Color(0xFF0F0F13),
+        body: Stack(
+          children: [
+            _buildBackgroundAccents(),
+            SafeArea(
+              child: Consumer<FourPlayerChessEngine>(
+                builder: (context, engine, _) {
+                  final state = engine.state;
+                  return Column(
+                    children: [
+                      _buildHeader(context, engine),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              _buildModeSelector(),
+                              const SizedBox(height: 16),
+                              _buildTurnIndicator(state),
+                              const SizedBox(height: 32),
+                              
+                              // Board with deep contrast
+                              _buildBoardWrapper(),
+                              
+                              const SizedBox(height: 32),
+                              const Text('ACTIVE CONTENDERS', style: TextStyle(letterSpacing: 3, fontWeight: FontWeight.w900, color: Colors.white24, fontSize: 10)),
+                              const SizedBox(height: 16),
+                              _buildPlayerStatusGrid(state),
+                              const SizedBox(height: 40),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),
-        body: Consumer<FourPlayerChessEngine>(
-          builder: (context, engine, _) {
-            final state = engine.state;
+      ),
+    );
+  }
 
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    // Mode selector
-                    _buildModeSelector(),
-                    const SizedBox(height: 12),
+  Widget _buildBackgroundAccents() {
+    return Positioned(
+      top: 100,
+      right: -100,
+      child: Container(
+        width: 300,
+        height: 300,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red.withOpacity(0.05)),
+        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100), child: const SizedBox()),
+      ),
+    );
+  }
 
-                    // Turn indicator
-                    _buildTurnIndicator(state),
-                    const SizedBox(height: 12),
+  Widget _buildHeader(BuildContext context, FourPlayerChessEngine engine) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      color: Colors.white.withOpacity(0.02),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+            onPressed: () => Navigator.pop(context),
+          ),
+          const Column(
+            children: [
+              Text('NEXUS QUAD', style: TextStyle(fontSize: 10, letterSpacing: 4, fontWeight: FontWeight.w900, color: Colors.purpleAccent)),
+              Text('War of Dynasties', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => _showResetDialog(context, engine),
+          ),
+        ],
+      ),
+    );
+  }
 
-                    // Chess board
-                    const FourPlayerChessBoardWidget(),
-                    const SizedBox(height: 12),
-
-                    // Game status
-                    _buildGameStatus(state),
-                    const SizedBox(height: 12),
-
-                    // Active players
-                    _buildActivePlayers(state),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+  void _showResetDialog(BuildContext context, FourPlayerChessEngine engine) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E1E26),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Reset Warzone?'),
+        content: const Text('All active progress will be lost. Reset board?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('CANCEL', style: TextStyle(color: Colors.white38))),
+          ElevatedButton(
+            onPressed: () { Navigator.pop(context); engine.reset(mode: _mode); },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.purpleAccent),
+            child: const Text('RE-DEPLOY'),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildModeSelector() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2C2C2C),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(15)),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            'Mode: ',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
-          ),
-          const SizedBox(width: 12),
-          ChoiceChip(
-            label: const Text('Free-for-All'),
-            selected: _mode == FourPlayerMode.freeForAll,
-            onSelected: (selected) {
-              if (selected) {
-                setState(() {
-                  _mode = FourPlayerMode.freeForAll;
-                  _engine.reset(mode: _mode);
-                });
-              }
-            },
-          ),
-          const SizedBox(width: 8),
-          ChoiceChip(
-            label: const Text('Teams (2v2)'),
-            selected: _mode == FourPlayerMode.teams,
-            onSelected: (selected) {
-              if (selected) {
-                setState(() {
-                  _mode = FourPlayerMode.teams;
-                  _engine.reset(mode: _mode);
-                });
-              }
-            },
-          ),
+          _buildModeTab('FFA', _mode == FourPlayerMode.freeForAll, () => setState(() { _mode = FourPlayerMode.freeForAll; _engine.reset(mode: _mode); })),
+          _buildModeTab('TEAMS 2V2', _mode == FourPlayerMode.teams, () => setState(() { _mode = FourPlayerMode.teams; _engine.reset(mode: _mode); })),
         ],
+      ),
+    );
+    }
+
+  Widget _buildModeTab(String label, bool active, VoidCallback onTap) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: active ? Colors.purpleAccent.withOpacity(0.2) : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: active ? Colors.purpleAccent.withOpacity(0.5) : Colors.transparent),
+          ),
+          child: Text(label, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: active ? Colors.white : Colors.white38)),
+        ),
       ),
     );
   }
 
   Widget _buildTurnIndicator(FourPlayerGameState state) {
-    if (state.isGameOver) {
-      return Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.green),
-        ),
-        child: Text(
-          _getWinnerText(state),
-          style: const TextStyle(
-            color: Colors.green,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-
+    if (state.isGameOver) return _buildGameOverPill(state);
+    
+    final color = _getPlayerColor(state.currentTurn);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF2C2C2C),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: _getPlayerColor(state.currentTurn).withOpacity(0.5), width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: _getPlayerColor(state.currentTurn).withOpacity(0.2),
-            blurRadius: 8,
-            spreadRadius: 2,
-          ),
-        ],
+        border: Border.all(color: color.withOpacity(0.4), width: 2),
+        boxShadow: [BoxShadow(color: color.withOpacity(0.15), blurRadius: 15, spreadRadius: 2)],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 14,
-            height: 14,
-            decoration: BoxDecoration(
-              color: _getPlayerColor(state.currentTurn),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(color: _getPlayerColor(state.currentTurn).withOpacity(0.5), blurRadius: 4),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            '${_getPlayerName(state.currentTurn).toUpperCase()}\'S TURN',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.2,
-            ),
-          ),
+          Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: [BoxShadow(color: color, blurRadius: 4)])),
+          const SizedBox(width: 16),
+          Text('${_getPlayerName(state.currentTurn).toUpperCase()}\'S STRIKE', style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 1.5, fontSize: 13)),
           if (state.inCheck[state.currentTurn] == true) ...[
-            const SizedBox(width: 10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: const Text(
-                'CHECK',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
+            const SizedBox(width: 12),
+            _buildCheckBadge(),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildGameStatus(FourPlayerGameState state) {
+  Widget _buildGameOverPill(FourPlayerGameState state) {
     return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2C2C2C),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Mode: ${state.mode == FourPlayerMode.freeForAll ? "Free-for-All" : "Teams (2v2)"}',
-            style: const TextStyle(color: Colors.white70),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Moves: ${state.moveHistory.length}',
-            style: const TextStyle(color: Colors.white70),
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      decoration: BoxDecoration(color: Colors.green.withOpacity(0.2), borderRadius: BorderRadius.circular(30), border: Border.all(color: Colors.green, width: 2)),
+      child: Text(_getWinnerText(state).toUpperCase(), style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w900, letterSpacing: 2)),
     );
   }
 
-  Widget _buildActivePlayers(FourPlayerGameState state) {
-    final players = FourPlayerColor.values;
+  Widget _buildCheckBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.circular(6)),
+      child: const Text('CHECK', style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1)),
+    );
+  }
 
+  Widget _buildBoardWrapper() {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.04),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white10),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.35), blurRadius: 40, spreadRadius: 2)],
+      ),
+      child: const FourPlayerChessBoardWidget(),
+    );
+  }
+
+  Widget _buildPlayerStatusGrid(FourPlayerGameState state) {
     return Wrap(
       spacing: 12,
       runSpacing: 12,
       alignment: WrapAlignment.center,
-      children: players.map((color) {
-        final isTurn = state.currentTurn == color;
-        final isEliminated = state.eliminated.contains(color);
+      children: FourPlayerColor.values.map((color) {
+        final active = state.currentTurn == color;
+        final dead = state.eliminated.contains(color);
         final pColor = _getPlayerColor(color);
-
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        
+        return Container(
+          width: 100,
+          padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isEliminated 
-                ? Colors.transparent 
-                : (isTurn ? pColor.withOpacity(0.25) : pColor.withOpacity(0.1)),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isEliminated ? Colors.grey : (isTurn ? pColor : pColor.withOpacity(0.4)),
-              width: isTurn ? 2 : 1.5,
-            ),
-            boxShadow: isTurn 
-                ? [BoxShadow(color: pColor.withOpacity(0.2), blurRadius: 8)] 
-                : null,
+            color: dead ? Colors.transparent : (active ? pColor.withOpacity(0.15) : Colors.white.withOpacity(0.03)),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: dead ? Colors.white10 : (active ? pColor : Colors.white24), width: active ? 2 : 1),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+          child: Column(
             children: [
-              Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  color: isEliminated ? Colors.grey : pColor,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    if (!isEliminated) BoxShadow(color: pColor.withOpacity(0.5), blurRadius: 4),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
+              Container(width: 8, height: 8, decoration: BoxDecoration(color: dead ? Colors.white12 : pColor, shape: BoxShape.circle)),
+              const SizedBox(height: 8),
               Text(
                 _getPlayerName(color).toUpperCase(),
                 style: TextStyle(
-                  color: isEliminated ? Colors.grey : Colors.white,
-                  fontSize: 12,
-                  fontWeight: isTurn ? FontWeight.w900 : FontWeight.w600,
-                  letterSpacing: 1.1,
-                  decoration: isEliminated ? TextDecoration.lineThrough : null,
+                  fontSize: 10,
+                  fontWeight: active ? FontWeight.w900 : FontWeight.bold,
+                  color: dead ? Colors.white24 : (active ? Colors.white : Colors.white54),
+                  decoration: dead ? TextDecoration.lineThrough : null,
                 ),
               ),
-              if (isEliminated) ...[
-                const SizedBox(width: 6),
-                const Icon(Icons.close, size: 14, color: Colors.red),
-              ],
             ],
           ),
         );
@@ -318,47 +261,24 @@ class _FourPlayerGameScreenState extends State<FourPlayerGameScreen> {
     );
   }
 
-  String _getPlayerName(FourPlayerColor color) {
+  Color _getPlayerColor(FourPlayerColor color) {
     switch (color) {
-      case FourPlayerColor.white:
-        return 'White';
-      case FourPlayerColor.black:
-        return 'Black';
-      case FourPlayerColor.red:
-        return 'Red';
-      case FourPlayerColor.blue:
-        return 'Blue';
+      case FourPlayerColor.white: return Colors.white;
+      case FourPlayerColor.black: return Colors.black;
+      case FourPlayerColor.red: return const Color(0xFFFF0055);
+      case FourPlayerColor.blue: return const Color(0xFF00AAFF);
     }
   }
 
-  Color _getPlayerColor(FourPlayerColor color) {
-    switch (color) {
-      case FourPlayerColor.white:
-        return Colors.white;
-      case FourPlayerColor.black:
-        return Colors.black;
-      case FourPlayerColor.red:
-        return const Color(0xFFFF0000);
-      case FourPlayerColor.blue:
-        return const Color(0xFF0066FF);
-    }
-  }
+  String _getPlayerName(FourPlayerColor color) => color.toString().split('.').last.toUpperCase();
 
   String _getWinnerText(FourPlayerGameState state) {
     if (state.mode == FourPlayerMode.freeForAll) {
-      final winner = FourPlayerColor.values.firstWhere(
-        (c) => !state.eliminated.contains(c),
-      );
-      return '${_getPlayerName(winner)} WINS!';
+      final winner = FourPlayerColor.values.firstWhere((c) => !state.eliminated.contains(c));
+      return '${_getPlayerName(winner)} VICTORIOUS';
     } else {
-      // Team mode
-      final team1Alive = !state.eliminated.contains(FourPlayerColor.white) ||
-                         !state.eliminated.contains(FourPlayerColor.black);
-      if (team1Alive) {
-        return 'White/Black Team WINS!';
-      } else {
-        return 'Red/Blue Team WINS!';
-      }
+      final team1Alive = !state.eliminated.contains(FourPlayerColor.white) || !state.eliminated.contains(FourPlayerColor.black);
+      return team1Alive ? 'TEAM ALPHA VICTORIOUS' : 'TEAM OMEGA VICTORIOUS';
     }
   }
 }

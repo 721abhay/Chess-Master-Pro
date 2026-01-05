@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'engine/chess_engine.dart';
 import 'engine/auth_engine.dart';
 import 'screens/main_menu.dart';
@@ -19,23 +20,20 @@ class ChessApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthEngine()),
       ],
       child: MaterialApp(
-        title: 'Chess Master',
+        title: 'Chess Master Pro',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          useMaterial3: true,
           brightness: Brightness.dark,
-          scaffoldBackgroundColor: const Color(0xFF1E1E1E),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xFF2C2C2C),
-            elevation: 0,
+          scaffoldBackgroundColor: const Color(0xFF0A0A0E),
+          textTheme: GoogleFonts.outfitTextTheme(
+            ThemeData.dark().textTheme,
           ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(0xFF6366F1),
+            brightness: Brightness.dark,
+            primary: const Color(0xFF6366F1),
+            secondary: const Color(0xFF8B5CF6),
           ),
         ),
         home: const MainMenuScreen(),
