@@ -134,39 +134,27 @@ class _FourPlayerChessBoardWidgetState extends State<FourPlayerChessBoardWidget>
                 PieceSymbols.getSymbol(
                   ChessPiece(
                     type: piece.type,
-                    // Use solid symbols for all players
-                    color: PieceColor.black,
+                    // Use White (outlined) symbols for ALL teams.
+                    // Outlined symbols are NOT replaced by grey emojis on Android.
+                    color: PieceColor.white,
                   ),
-                ) + '\uFE0E', // Force text rendering to avoid emoji conversion
+                ),
                 style: TextStyle(
                   fontSize: size * 0.75,
                   fontWeight: FontWeight.bold,
                   height: 1.0,
                   color: _getPieceColor(piece.color),
                   shadows: [
-                    // Thick high-contrast outline to define the piece shape
+                    // Extra thick black/white border to make the outlined piece look "solid"
+                    Shadow(color: _getBorderColor(piece.color), offset: const Offset(-1.5, -1.5)),
+                    Shadow(color: _getBorderColor(piece.color), offset: const Offset(1.5, -1.5)),
+                    Shadow(color: _getBorderColor(piece.color), offset: const Offset(-1.5, 1.5)),
+                    Shadow(color: _getBorderColor(piece.color), offset: const Offset(1.5, 1.5)),
+                    // Inner "glow" of the team color to fill the hollow shape
                     Shadow(
-                      color: _getBorderColor(piece.color),
-                      offset: const Offset(-1.2, -1.2),
+                      color: _getPieceColor(piece.color).withOpacity(0.8),
+                      blurRadius: 1,
                     ),
-                    Shadow(
-                      color: _getBorderColor(piece.color),
-                      offset: const Offset(1.2, -1.2),
-                    ),
-                    Shadow(
-                      color: _getBorderColor(piece.color),
-                      offset: const Offset(-1.2, 1.2),
-                    ),
-                    Shadow(
-                      color: _getBorderColor(piece.color),
-                      offset: const Offset(1.2, 1.2),
-                    ),
-                    // Extra glow for White and Black pieces to pop on their backgrounds
-                    if (piece.color == FourPlayerColor.white || piece.color == FourPlayerColor.black)
-                      Shadow(
-                        color: _getBorderColor(piece.color).withOpacity(0.5),
-                        blurRadius: 4,
-                      ),
                   ],
                 ),
               ),
