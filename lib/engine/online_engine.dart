@@ -1,9 +1,9 @@
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import '../models/chess_models.dart';
 import 'chess_engine.dart';
 
 class OnlineChessEngine extends ChessEngine {
-  late IO.Socket socket;
+  late socket_io.Socket socket;
   final String serverUrl;
   String? roomId;
   PieceColor? playerColor;
@@ -15,7 +15,7 @@ class OnlineChessEngine extends ChessEngine {
   }
 
   void _initSocket() {
-    socket = IO.io(serverUrl, <String, dynamic>{
+    socket = socket_io.io(serverUrl, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +9,8 @@ import 'online_setup_screen.dart';
 import 'leaderboard_screen.dart';
 import 'profile_screen.dart';
 import 'login_screen.dart';
+import 'settings_screen.dart';
+import 'puzzle_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MainMenuScreen extends StatefulWidget {
@@ -134,6 +135,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
         ),
       ),
       actions: [
+        IconButton(
+          icon: const Icon(Icons.settings_outlined, color: Colors.white70),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsScreen())),
+        ),
         _buildUserAction(context, auth),
         const SizedBox(width: 12),
       ],
@@ -349,6 +354,15 @@ class _MainMenuScreenState extends State<MainMenuScreen> with SingleTickerProvid
           Icons.webhook,
           const Color(0xFFEC4899),
           () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FourPlayerGameScreen())),
+        ),
+        const SizedBox(height: 16),
+        _buildModeTile(
+          context,
+          'Tactical Breach',
+          'Daily Puzzle Challenge',
+          Icons.extension,
+          const Color(0xFFF59E0B),
+          () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PuzzleScreen())),
         ),
       ],
     );

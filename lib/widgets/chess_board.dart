@@ -337,33 +337,4 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget> {
       ));
     }
   }
-
-  /// Get asset path for piece image
-  String _getPieceAssetPath(ChessPiece piece) {
-    final color = piece.color == PieceColor.white ? 'w' : 'b';
-    String type;
-    
-    switch (piece.type) {
-      case PieceType.king:
-        type = 'king';
-        break;
-      case PieceType.queen:
-        type = 'queen';
-        break;
-      case PieceType.rook:
-        type = 'rook';
-        break;
-      case PieceType.bishop:
-        type = 'bishop';
-        break;
-      case PieceType.knight:
-        type = 'knight';
-        break;
-      case PieceType.pawn:
-        type = 'pawn';
-        break;
-    }
-    
-    return 'assets/pieces/${color}_$type.png';
-  }
 }

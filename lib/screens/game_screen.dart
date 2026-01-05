@@ -233,7 +233,9 @@ class _GameScreenState extends State<GameScreen> {
             final moves = List<Move>.from(state.moveHistory);
             moves.removeLast();
             if (isAIMode && moves.isNotEmpty) moves.removeLast();
-            for (final move in moves) engine.makeMove(move);
+            for (final move in moves) {
+              engine.makeMove(move);
+            }
           }
         },
         onFlipBoard: () => setState(() => isBoardFlipped = !isBoardFlipped),

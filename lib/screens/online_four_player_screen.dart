@@ -11,7 +11,6 @@ class OnlineFourPlayerGameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final engine = Provider.of<OnlineFourPlayerEngine>(context);
-    final state = engine.state;
 
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),

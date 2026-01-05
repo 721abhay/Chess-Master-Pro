@@ -1,10 +1,10 @@
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import '../models/chess_models.dart';
 import '../models/four_player_models.dart';
 import 'four_player_engine.dart';
 
 class OnlineFourPlayerEngine extends FourPlayerChessEngine {
-  late IO.Socket socket;
+  late socket_io.Socket socket;
   final String serverUrl;
   String? roomId;
   FourPlayerColor? playerColor;
@@ -17,7 +17,7 @@ class OnlineFourPlayerEngine extends FourPlayerChessEngine {
   }
 
   void _initSocket() {
-    socket = IO.io(serverUrl, <String, dynamic>{
+    socket = socket_io.io(serverUrl, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
