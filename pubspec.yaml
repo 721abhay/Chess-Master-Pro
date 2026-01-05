@@ -1,0 +1,50 @@
+name: chess_app
+description: "Production-level chess platform for Android with advanced AI"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State Management
+  provider: ^6.1.0
+  
+  # HTTP Client for backend API
+  http: ^1.1.0
+  
+  # SVG rendering for premium pieces
+  flutter_svg: ^2.0.0
+  
+# Audio for sound effects
+  audioplayers: ^5.2.0
+  
+  # File operations for PGN export
+  share_plus: ^7.2.0
+  path_provider: ^2.1.0
+  
+  # Icons
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # Assets configuration
+  assets:
+    - assets/sounds/
+    - assets/pieces/
+  
+  # Future: Custom fonts if needed
+  # fonts:
+  #   - family: Chess
+  #     fonts:
+  #       - asset: fonts/Chess-Regular.ttf
